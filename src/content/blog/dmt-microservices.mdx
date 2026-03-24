@@ -1,0 +1,139 @@
+---
+title: Building a High-Performance DMT System — Spring Boot Microservices at Scale
+description: Learn how to design and build a Domestic Money Transfer (DMT) system using Spring Boot microservices, optimized for reliability, scalability, and achieving 1000+ transactions per second.
+image: /images/blog/dmt-microservices.webp
+createdAt: 2025-03-05
+updatedAt: 2025-04-05
+---
+
+## What is Domestic Money Transfer (DMT)?
+
+Domestic Money Transfer (DMT) enables customers to send money across banks within the same country in real-time.  
+In India, DMT is widely used by fintech platforms, payment service providers, and retailers to facilitate **instant transfers** for migrant workers, small businesses, and digital wallets.
+
+A DMT system must guarantee:
+
+- **High availability** — 24/7 uptime
+- **Scalability** — handle spikes in transactions
+- **Reliability** — ensure no transaction is lost
+- **Security** — safeguard customer data and comply with RBI/PCI-DSS guidelines
+
+---
+
+## Why Microservices for DMT?
+
+We chose **Spring Boot microservices** to design the DMT backend because of:
+
+- **Scalability** — independent services can scale horizontally
+- **Resilience** — failures are isolated, improving fault tolerance
+- **Faster Development** — smaller, focused teams can own services
+- **Flexibility** — polyglot persistence & integration with banking APIs
+
+### Core Microservices in DMT
+
+1. **User Service** — customer KYC, authentication
+2. **Wallet/Account Service** — manages sender/receiver balances
+3. **Transaction Service** — initiates & processes transfers
+4. **Settlement Service** — handles reconciliation with banks/NPCI
+5. **Notification Service** — SMS/Email/WhatsApp alerts
+6. **Audit/Compliance Service** — logs all money movement for RBI reporting
+
+Each service communicates via **Kafka (event-driven)** and **REST/gRPC (synchronous calls where necessary).**
+
+---
+
+## Core Technology Stack
+
+- **API Gateway (Spring Cloud Gateway / Nginx Ingress)** — entry point, routing, rate-limiting
+- **Kafka / RabbitMQ** — asynchronous transaction event handling
+- **Redis** — caching frequently accessed data (e.g., user limits, bank IFSC lookups)
+- **PostgreSQL** — strong relational consistency for transaction records
+- **ElasticSearch** — fast search for transaction history & compliance queries
+
+---
+
+## Achieving 1000 TPS in DMT
+
+Handling **1000+ transactions per second** requires optimization across multiple layers:
+
+### 1. Horizontal Scaling
+
+- Deploy each microservice in **Kubernetes** (EKS/GKE/AKS) with **HPA (Horizontal Pod Autoscaler)**
+- Scale **Transaction Service** independently since it's the most loaded
+
+### 2. Asynchronous Processing
+
+- Incoming requests → **API Gateway** → **Transaction Service**
+- Instead of synchronous DB writes, push events into **Kafka**
+- Downstream services (Settlement, Compliance, Notifications) consume asynchronously
+
+### 3. Database Optimization
+
+- **Write-ahead logging (WAL) tuning** in PostgreSQL
+- **Connection pooling** with HikariCP
+- **Sharding/Partitioning** transaction tables for high write throughput
+- Use **CQRS** (Command Query Responsibility Segregation):
+  - Commands (writes) go to PostgreSQL
+  - Queries (reads) served from ElasticSearch or read replicas
+
+### 4. Caching Layer
+
+- **Redis** to store session, user limits, and transaction pre-validation checks
+- Reduces database load by **30-40%**
+
+### 5. Idempotency & Reliability
+
+- Every transaction has a **UUID** → ensures retries don’t cause duplicates
+- **Kafka exactly-once semantics** for settlement events
+
+### 6. Load Testing
+
+- Tools like **JMeter / Locust / Gatling**
+- Simulate **1000+ TPS load**
+- Monitor with **Prometheus + Grafana**
+
+---
+
+## Sample Spring Boot Snippet — Transaction Event Publishing
+
+```java
+@Service
+public class TransactionService {
+
+    private final KafkaTemplate<String, TransactionEvent> kafkaTemplate;
+
+    public TransactionService(KafkaTemplate<String, TransactionEvent> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+    public void initiateTransaction(TransactionRequest request) {
+        TransactionEvent event = new TransactionEvent(
+            UUID.randomUUID().toString(),
+            request.getSenderId(),
+            request.getReceiverId(),
+            request.getAmount()
+        );
+
+        // Publish asynchronously to Kafka
+        kafkaTemplate.send("transaction-events", event);
+    }
+}
+```
+
+## Key Takeaways
+
+- **Spring Boot microservices** + **Kafka** + **Kubernetes** provide the foundation for a scalable DMT backend
+- Achieving **1000 TPS** is possible with:
+  - Asynchronous event-driven processing
+  - Optimized databases (partitioning, pooling, CQRS)
+  - Caching & idempotency safeguards
+  - Horizontal scaling with Kubernetes
+
+---
+
+## Final Thoughts
+
+Building a **DMT platform** is not just about speed but also **trust**.  
+Users expect their money to arrive instantly and safely, while regulators demand full compliance.
+
+With the right **architecture, optimizations, and monitoring**, we can deliver a high-performance system capable of handling **1000+ TPS** consistently.
