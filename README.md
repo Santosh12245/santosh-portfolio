@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # [chanhdai.com](https://chanhdai.com)
 
 A minimal portfolio, component registry, and blog to showcase my work as a Design Engineer.
@@ -79,3 +80,7 @@ Licensed under the [MIT license](./LICENSE).
 [![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=ncdai/chanhdai.com@github)](https://gitads.dev/v1/ad-track?source=ncdai/chanhdai.com@github)
 
 <!-- GitAds-Verify: QICCAB4PFWV9MHUGPGPN5B2I8SAXLAOK -->
+=======
+# santosh-portfolio
+A minimal portfolio, component registry, and blog.
+>>>>>>> 2ab216b248087f111aebcffb12cea4d3fbd88ca7
