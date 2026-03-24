@@ -1,15 +1,15 @@
-<<<<<<< HEAD
+
 # [chanhdai.com](https://chanhdai.com)
 
 A minimal portfolio, component registry, and blog to showcase my work as a Design Engineer.
 
-Check out the live site: [chanhdai.com](https://chanhdai.com)
+<!-- Check out the live site: [chanhdai.com](https://chanhdai.com) -->
 
-<picture>
+<!-- <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://assets.chanhdai.com/images/screenshot-desktop-dark.webp">
   <source media="(prefers-color-scheme: light)" srcset="https://assets.chanhdai.com/images/screenshot-desktop-light.webp">
   <img src="https://assets.chanhdai.com/images/screenshot-desktop-light.webp" alt="Screenshot">
-</picture>
+</picture> -->
 
 ## Overview
 
