@@ -2,8 +2,8 @@ import type { Project } from "../types/projects";
 
 export const PROJECTS: Project[] = [
   {
-    id: "chandan-dot-com",
-    title: "chandanpradhan.vercel.app",
+    id: "santosh-dot-com",
+    title: "santoshsportfolio.vercel.app",
     period: {
       start: "01.2025",
     },

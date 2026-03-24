@@ -3,7 +3,7 @@ import type { NavItem } from "@/types/nav";
 
 export const SITE_INFO = {
   name: USER.displayName,
-  url: process.env.APP_URL || "https://chandanpradhan.vercel.app",
+  url: process.env.APP_URL || "https://santoshsportfolio.vercel.app",
   ogImage: USER.ogImage,
   description: USER.bio,
   keywords: USER.keywords,
@@ -48,7 +48,7 @@ export const GITHUB_USERNAME = "Santosh12245";
 export const SOURCE_CODE_GITHUB_URL = "https://github.com/ncdai/chanhdai.com";
 
 export const UTM_PARAMS = {
-  utm_source: "chandanpradhan.vercel.app",
+  utm_source: "santoshsportfolio.vercel.app",
   utm_medium: "portfolio_website",
   utm_campaign: "referral",
 };
